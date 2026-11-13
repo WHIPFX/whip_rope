@@ -1,0 +1,47 @@
+whip_rope_seg - rope segment for whip_rope (v1, 2026-10-15)
+===========================================================
+One rigid rope segment, drawn once per pair of neighbouring Verlet nodes and placed every frame with SetEntityMatrix.
+
+FILES (stream/)
+  whip_rope_seg.ydr      the segment, casts shadows
+  whip_rope_seg_ns.ydr   the same segment, no shadows (archetype flag 8192)
+  whip_rope_seg.ytd      textures: whip_rope_seg_d (diffuse, DXT1 256x256), whip_rope_seg_n (normal, BC5 256x256)
+  whip_rope_seg.ytyp     archetypes whip_rope_seg and whip_rope_seg_ns (lodDist 100, no physics)
+  fxmanifest:  data_file 'DLC_ITYP_REQUEST' 'stream/whip_rope_seg.ytyp'
+
+SHAPE (model space, scale 1)
+  capsule along local +Y, origin in the middle
+  body  y -0.125 .. +0.125 (0.25 m), radius 0.0175 (3.5 cm rope)
+  caps  hemispheres of the rope's radius beyond each end (y reaches +/-0.1425)
+  HD    12 sides, 3-ring caps, 168 triangles (to 15 m)
+  LOD   6 sides, cone caps, 24 triangles (15 - 120 m)
+  no collision
+
+LOOK
+  three-strand right-hand lay, warm tan #b48a55, strands in the normal map (normal.sps, bumpiness 1.2, matte)
+  UV u runs around the rope (u = 0 at +Z, increasing towards +X), v along it; one texture tile = one lay with all 3
+  strands; the body carries exactly 2 lays, so every segment starts and ends at the same strand phase
+
+PLACING A SEGMENT between node a and node b
+  centre   = (a + b) / 2
+  forward  = (b - a) / |b - a|                     -> the matrix's Y axis, scaled by |b - a| / 0.25
+  right/up = your rotation-minimising frame          -> X and Z axes, BOTH scaled by the same thickness factor
+  roll 0 puts strand 1 at +Z (up)
+  OVERLAP: use 0. The hemispherical caps close every joint by themselves: at Y scale |b - a| / 0.25 each cap is
+  centred on its node, so neighbours' caps coincide and the strands meet in phase. Extra overlap moves the body past
+  the node, which breaks the strand phase at the joint and makes a lump on the outside of bends (see the previews).
+  Never scale X differently from Z: equal X/Z scale keeps the side normals perpendicular to Y, so lighting and the
+  normal map hold under any Y stretch.
+
+TANGENTS follow Rockstar's convention (checked against game drawables): tangent along +u, w = sign of
+cross(tangent, normal) . dP/dv. Normal map is DirectX style (as Rockstar's).
+
+Untested in game.
+
+WINDING FIXED, 15 Oct 2026 (whip_rope; Josh: "it goes inside out and I see the bottom side")
+  v1 had every HD triangle wound against its normals (144 of 144; the 24 others are zero-area cap tips) and
+  half the LOD's (12 of 24). GTA culls by winding, so it drew the inside of the far wall: the underside, lit as
+  the underside. Both .ydr were re-wound triangle by triangle so (p1-p0)x(p2-p0) agrees with the vertex normals,
+  as every working model does; vertices, triangles, shader, textures, bounds and LODs are unchanged (checked
+  field by field). Checker: the session scratchpad's ydrcheck (CodeWalker.Core). A rebuild from the v1 source
+  needs the same fix there.
