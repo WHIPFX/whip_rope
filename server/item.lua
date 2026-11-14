@@ -49,7 +49,7 @@ end
 
 --- A rope back into a player's pockets (coiled up, or owed). Answers where it went, or false.
 function Ropes.giveItem(source, amount, reason)
-    local where, err = Whip.call('AddItem', source, Config.Item.Name, amount or 1, nil, reason)
+    local where, err = Whip.core:AddItem(source, Config.Item.Name, amount or 1, nil, reason)
     if not where then
         print(('[whip_rope] could not give %s rope(s) back to %s: %s'):format(tostring(amount or 1),
             tostring(source), tostring(err)))
@@ -64,7 +64,7 @@ local function payOwed(source, charId)
     local owed = Ropes.takeOwed(charId)
     if owed <= 0 then return end
     if Ropes.giveItem(source, owed, 'ropes you had out') then
-        Whip.call('NotifyPlayer', source, owed == 1 and 'The rope you had out is back in your pockets'
+        Whip.core:NotifyPlayer(source, owed == 1 and 'The rope you had out is back in your pockets'
             or ('The %d ropes you had out are back in your pockets'):format(owed), 'info')
     else
         Ropes.owe(charId, owed)
@@ -84,7 +84,8 @@ CreateThread(function()
     if not next(Ropes.owed) or not Whip.ready(60000) then return end
     for _, id in ipairs(GetPlayers()) do
         local source = tonumber(id)
-        local sheet = Whip.call('GetPlayer', source)
+        ---@cast source -nil -- GetPlayers lists ids as numeric strings
+        local sheet = Whip.core:GetPlayer(source)
         if type(sheet) == 'table' and sheet.charId and Ropes.owed[sheet.charId] then
             payOwed(source, sheet.charId)
         end
@@ -102,7 +103,7 @@ function Ropes.takeIn(ropeId)
     if not charId then return true end
     Ropes.owe(charId, 1)
     CreateThread(function()
-        local sheet = Whip.call('GetPlayer', owner)
+        local sheet = Whip.core:GetPlayer(owner)
         if type(sheet) == 'table' and sheet.charId == charId then payOwed(owner, charId) end
     end)
     return true

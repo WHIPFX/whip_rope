@@ -24,7 +24,7 @@ function Rope.LoadOwnLook(rope)
     local look = rope.opts and rope.opts.look
     if not look then return end
     for _, model in ipairs({ look.model, look.modelNoShadow }) do
-        if model and IsModelInCdimage(model) and not HasModelLoaded(model) then Whip.call('LoadModel', model) end
+        if model and IsModelInCdimage(model) and not HasModelLoaded(model) then Whip.core:LoadModel(model) end
     end
 end
 

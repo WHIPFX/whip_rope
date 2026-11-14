@@ -38,7 +38,7 @@ local function driverOf(netId)
         if src and src > 0 then return src, 'seat' end
     end
     -- (whip_core down: false and why, so no take drives it)
-    local src, how = Whip.call('GetVehicleDriver', { netId = netId })
+    local src, how = Whip.core:GetVehicleDriver({ netId = netId })
     if type(src) == 'number' and src > 0 and how == 'take' then return src, 'take' end
     return nil
 end

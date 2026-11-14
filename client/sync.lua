@@ -111,7 +111,7 @@ end
 CreateThread(function()
     while not NetworkIsPlayerActive(PlayerId()) do Wait(500) end
     Wait(2000)
-    if Whip.call('IsPlayerLoaded') == true then Rope.RequestRopeSync('resource start', true) end
+    if Whip.core:IsPlayerLoaded() == true then Rope.RequestRopeSync('resource start', true) end
 end)
 AddEventHandler('whip_core:player:loaded', function() Rope.RequestRopeSync('character loaded') end)
 AddEventHandler('whip_core:player:spawned', function() Rope.RequestRopeSync('spawned') end)

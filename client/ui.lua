@@ -24,17 +24,17 @@ local COIL_TIMEOUT_MS = 10000     -- after the bar's own length, if the server n
 -- (AcceptHint: [E], or A's picture), letting go is jump (KeyHint: Space, or X on a pad), and on a pad
 -- the wheel is on whichever button the player's layout has it (GetPadActionButton), named if none.
 local function holdText()
-    local accept = Whip.call('AcceptHint')
+    local accept = Whip.core:AcceptHint()
     accept = type(accept) == 'string' and accept or '[E]'
-    if Whip.call('IsControllerActive') == true then
-        local slot, pictures = Whip.call('GetPadActionButton', 'radial')
+    if Whip.core:IsControllerActive() == true then
+        local slot, pictures = Whip.core:GetPadActionButton('radial')
         local wheel = (type(slot) == 'string' and type(pictures) == 'string') and (pictures .. ' Wheel') or 'Wheel'
         return 'Holding a rope end  |  ' .. accept .. ' Tie it where you look  |  ' .. wheel .. ': put it down, let go or coil up'
     end
     return 'Holding a rope end  |  ' .. accept .. ' Tie it where you look  |  [F1] Put it down, let go or coil up'
 end
 local function hangText()
-    local letGo = Whip.call('KeyHint', 'Space', 'x')
+    local letGo = Whip.core:KeyHint('Space', 'x')
     return 'Hanging on a rope  |  ' .. (type(letGo) == 'string' and letGo or '[Space]') .. ' Let go'
 end
 
@@ -113,20 +113,20 @@ end
 local function unmountRope(ropeId)
     if not mounted[ropeId] then return end
     mounted[ropeId] = nil
-    Whip.call('RemoveAction', endId(ropeId, 'origin'))
-    Whip.call('RemoveAction', endId(ropeId, 'tail'))
-    Whip.call('RemoveAction', hangId(ropeId))
+    Whip.core:RemoveAction(endId(ropeId, 'origin'))
+    Whip.core:RemoveAction(endId(ropeId, 'tail'))
+    Whip.core:RemoveAction(hangId(ropeId))
 end
 
 local function mountEnd(ropeId, rope, which, m)
     local p = Rope.EndNode(rope, which).position
-    if Whip.call('AddAction', endAction(ropeId, which, p)) then m[which] = p end   -- the id, or false and why
+    if Whip.core:AddAction(endAction(ropeId, which, p)) then m[which] = p end   -- the id, or false and why
 end
 
 local function mountHang(ropeId, rope, m)
     local p = Config.PlayerHang.Enabled and nearestMidNode(rope)
     if not p then return end
-    if Whip.call('AddAction', hangAction(ropeId, p)) then m.hang = p end
+    if Whip.core:AddAction(hangAction(ropeId, p)) then m.hang = p end
 end
 
 local function maintainPrompts()
@@ -253,9 +253,9 @@ local function tick(withPrompts)
         if wantTie then
             TIE.reach = Config.Rules.Reach
             TIE.at = { aimBox = tieKinds() }
-            tieUp = Whip.call('AddAction', TIE) and true or false
+            tieUp = Whip.core:AddAction(TIE) and true or false
         else
-            Whip.call('RemoveAction', 'tie')
+            Whip.core:RemoveAction('tie')
             tieUp = false
         end
     end
@@ -273,9 +273,9 @@ local function tick(withPrompts)
     end
     if text ~= shownText then
         if text then
-            Whip.call('ShowText', text, { icon = 'pickup' })
+            Whip.core:ShowText(text, { icon = 'pickup' })
         else
-            Whip.call('HideText')
+            Whip.core:HideText()
         end
         shownText = text
     end
@@ -312,15 +312,15 @@ end)
 -- Reach changed in /whip → Settings: apply it to the tie prompt at once
 Whip.onConfigChanged('Rules.Reach', function(value)
     TIE.reach = tonumber(value) or TIE.reach
-    if tieUp then Whip.call('UpdateAction', 'tie', { reach = TIE.reach }) end
+    if tieUp then Whip.core:UpdateAction('tie', { reach = TIE.reach }) end
 end)
 
 -- Tying to the map turned on or off in /whip → Settings: a tie prompt up now is put up again with it (or without)
 Whip.onConfigChanged('Rules.TieToMap', function()
     if tieUp then
-        Whip.call('RemoveAction', 'tie')
+        Whip.core:RemoveAction('tie')
         TIE.at = { aimBox = tieKinds() }
-        tieUp = Whip.call('AddAction', TIE) and true or false
+        tieUp = Whip.core:AddAction(TIE) and true or false
     end
 end)
 

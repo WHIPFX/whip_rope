@@ -118,7 +118,7 @@ local function onTieVehicle(source, _, ropeId, which, netId, ox, oy, oz)
     end
 
     -- Which whip car it is, when it is one: a Director Test's car gives the rope back as it goes (server/item.lua)
-    local car = Whip.call('GetVehicleBy', 'netId', netId)
+    local car = Whip.core:GetVehicleBy('netId', netId)
     rope[which] = { type = 'vehicle', netId = netId, offset = { x = ox, y = oy, z = oz },
                     vehicleId = type(car) == 'table' and tonumber(car.vehicleId) or nil }
     Ropes.takeOtherIfLoose(rope, which, source)
@@ -258,7 +258,7 @@ local function onCoil(source, player, ropeId)
     if rope.coiling then coilEnded(source) return false, 'Someone is already coiling it up' end
 
     rope.coiling = source
-    local done = Whip.call('Progress', source, {
+    local done = Whip.core:Progress(source, {
         label = 'Coiling up the rope',
         duration = Config.Item.CoilDuration or 3000,
         icon = 'pickup',
@@ -539,7 +539,7 @@ Whip.command('clearropes', { dev = true, whileDead = true }, function()
     for id in pairs(Ropes.all) do ids[#ids + 1] = id end
     for _, id in ipairs(ids) do
         local rope = Ropes.all[id]
-        local charId = not rope.byResource and Whip.call('GetCharId', rope.owner)
+        local charId = not rope.byResource and Whip.core:GetCharId(rope.owner)
         if rope.byResource then
             Ropes.remove(id, 'cleared by an admin')
         elseif charId and charId == rope.ownerCharId then
