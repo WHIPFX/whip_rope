@@ -118,7 +118,7 @@ local function onTieVehicle(source, _, ropeId, which, netId, ox, oy, oz)
     end
 
     -- Which whip car it is, when it is one: a Director Test's car gives the rope back as it goes (server/item.lua)
-    local car = Whip.core:GetVehicleBy('netId', netId)
+    local car = Whip.core:GetVehicle({ netId = netId })
     rope[which] = { type = 'vehicle', netId = netId, offset = { x = ox, y = oy, z = oz },
                     vehicleId = type(car) == 'table' and tonumber(car.vehicleId) or nil }
     Ropes.takeOtherIfLoose(rope, which, source)
