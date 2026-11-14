@@ -46,6 +46,7 @@ end
 
 -- ---- Euphoria (NM messages) ----
 
+---@diagnostic disable-next-line: undefined-global -- not in the natives library; nil on a game without them (sendNm skips those)
 local NM = { bool = SetNmMessageBool, float = SetNmMessageFloat, int = SetNmMessageInt, vec3 = SetNmMessageVec3 }
 
 local function sendNm(ped, id, args)

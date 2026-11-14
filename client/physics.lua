@@ -390,6 +390,7 @@ local function ApplyAnchorCoupling(rope, which, dt)
     local endType = rope[which .. 'Type']
     local entity, mass, isVehicle = bodyOf(rope, which)
     if not entity then return noForce() end
+    ---@cast mass -nil -- bodyOf answers a mass with every entity
 
     -- Just tied: let the rope settle before it pulls — either end just tied holds both, so one end is
     -- never pulled alone
@@ -462,7 +463,7 @@ local function ApplyAnchorCoupling(rope, which, dt)
 
     -- The other end counts as a body only while it moves freely; still, or held by other ropes, it is an
     -- anchor like a post
-    local otherKg = otherEntity and math.max(otherMass, 50.0) or nil
+    local otherKg = otherEntity and math.max(otherMass --[[@as number]], 50.0) or nil
     if otherKg and (isStill(rope, otherEnd) or heldByOthers(rope, otherEnd)) then otherKg = nil end
 
     -- The ceiling: MaxAcceleration on the lighter of the two moving things (this one alone against an
@@ -561,10 +562,12 @@ function Rope.ApplyRopeLimit(rope, frameDt)
         nA = span / d
         nB = -nA
     end
+    ---@cast nA -nil -- both set by here, one way or the other
+    ---@cast nB -nil
     local naturalLength = (#rope.nodes - 1) * linkOf(rope)
     if d <= naturalLength then return end
-    local invA = eA and 1.0 / math.max(mA, 50.0) or 0.0
-    local invB = eB and 1.0 / math.max(mB, 50.0) or 0.0
+    local invA = eA and 1.0 / math.max(mA --[[@as number]], 50.0) or 0.0
+    local invB = eB and 1.0 / math.max(mB --[[@as number]], 50.0) or 0.0
     local zero = vector3(0.0, 0.0, 0.0)
     local vA = eA and GetEntityVelocity(eA) or zero
     local vB = eB and GetEntityVelocity(eB) or zero

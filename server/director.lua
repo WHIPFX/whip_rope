@@ -91,7 +91,8 @@ local function carOf(made)
         local v = Whip.call('GetVehicle', made.vehicleId)
         ent = type(v) == 'table' and v.entity or nil
     end
-    if (not ent or ent == 0) and tonumber(made.netId) then ent = NetworkGetEntityFromNetworkId(tonumber(made.netId)) end
+    local netId = tonumber(made.netId)
+    if (not ent or ent == 0) and netId then ent = NetworkGetEntityFromNetworkId(netId) end
     if ent and ent ~= 0 and DoesEntityExist(ent) then return ent end
     return nil
 end
@@ -122,9 +123,10 @@ local function endFor(card, where, thing, edge)
     end
     -- A prop that moves (its physics object, networked): tied to it; one standing still (each game shows its own) and a
     -- spot: at its place
-    if thing.kind == 'prop' and type(made) == 'table' and tonumber(made.netId) then
-        local ent = NetworkGetEntityFromNetworkId(tonumber(made.netId))
-        if ent and ent ~= 0 and DoesEntityExist(ent) then return { type = 'object', netId = tonumber(made.netId) } end
+    local propNetId = thing.kind == 'prop' and type(made) == 'table' and tonumber(made.netId)
+    if propNetId then
+        local ent = NetworkGetEntityFromNetworkId(propNetId)
+        if ent and ent ~= 0 and DoesEntityExist(ent) then return { type = 'object', netId = propNetId } end
     end
     local c = thing.coords
     if type(c) ~= 'table' or not c.x then return nil, label .. ' has no place' end

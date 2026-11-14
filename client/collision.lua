@@ -601,6 +601,7 @@ local function pushOffCars(nodes, near, dt, r, friction)
                 if not hit then
                     node.onCar, node.carPlane = nil, nil
                 else
+                    ---@cast n -nil -- set with hit
                     local dist = dot(to - at, n)
                     if dist > CAR_GAP * 2 then
                         node.onCar, node.carPlane = nil, nil   -- lifted off it
