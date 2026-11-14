@@ -6,6 +6,7 @@ name 'whip_rope'
 description 'A physics rope: carry it as an item, tie it to cars, props and the map where you aim, tow with it, hang off it. A whip satellite.'
 author 'Whippy'
 version '1.0.0'
+whip_updates 'WHIPFX/whip_rope'   -- whip_core checks this repository's releases for a newer version
 
 -- Whip.register re-runs our registrations whenever whip_core starts; Whip.call is safe while it's down;
 -- Whip.configPage puts config.lua in /whip.
