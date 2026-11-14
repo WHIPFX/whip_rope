@@ -74,5 +74,5 @@ WHIP's docs. whip_fuel's `server/hose.lua` is a complete example.
 
 ## License
 
-whip_rope is licensed under the GNU LGPL 3.0; see `LICENSE`. `whip_core`'s `NOTICE.md` lists what the licence
-doesn't cover.
+whip_rope is licensed under the GNU LGPL 3.0; see `COPYING.LESSER`, and `COPYING` for the GPL 3.0 it builds on.
+`NOTICE.md` says what the licence doesn't cover; `whip_core`'s `NOTICE.md` is the full list.
