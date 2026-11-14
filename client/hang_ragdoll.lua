@@ -103,7 +103,7 @@ end
 -- ---- the anchor, and the rope's view of it ----
 
 local function makeAnchor(p, driven)
-    if not Whip.call('LoadModel', ANCHOR_MODEL, 3000) then return nil end
+    if not Whip.core:LoadModel(ANCHOR_MODEL, 3000) then return nil end
     local anchor = CreateObject(ANCHOR_MODEL, p.x, p.y, p.z, false, false, false)
     SetModelAsNoLongerNeeded(ANCHOR_MODEL)
     if not DoesEntityExist(anchor) then return nil end

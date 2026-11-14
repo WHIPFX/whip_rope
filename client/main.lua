@@ -385,7 +385,7 @@ end)
 
 -- Developer mode only (whip_core decides).
 local function devAllowed()
-    if Whip.call('HasDevTools') == true then return true end
+    if Whip.core:HasDevTools() == true then return true end
     Rope.Util.Notify('That command needs developer mode on (/w)', 'error')
     return false
 end

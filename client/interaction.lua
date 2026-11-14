@@ -222,14 +222,14 @@ local function applyHoldWalk()
     local h = Config.Holding or {}
     local style = holdWalk and h.WalkStyle or nil
     if style == 'none' or style == '' or style == false then style = nil end
-    Whip.call('SetWalkOverride', style)
+    Whip.core:SetWalkOverride(style)
     local speed = holdWalk and h.Speed or nil
     if speed == 'walk' then
-        Whip.call('BlockControls', 'holdWalk', { walk = true })
+        Whip.core:BlockControls('holdWalk', { walk = true })
     elseif speed == 'jog' then
-        Whip.call('BlockControls', 'holdWalk', { jog = true })
+        Whip.core:BlockControls('holdWalk', { jog = true })
     else
-        Whip.call('UnblockControls', 'holdWalk')
+        Whip.core:UnblockControls('holdWalk')
     end
 end
 
@@ -431,7 +431,7 @@ local function HangPedOn(ped, own)
     Rope.HangOwnBody = own == true
     if own then
         -- Hidden from every other game (each hangs its own stand-in of us), unhurt
-        Whip.call('HoldPlayerPed', 'hang', { hidden = true, invincible = true })
+        Whip.core:HoldPlayerPed('hang', { hidden = true, invincible = true })
     else
         for _, f in ipairs(HANG_PED_FLAGS) do
             if savedPed.flags[f] == nil then savedPed.flags[f] = GetPedConfigFlag(ped, f, true) and true or false end
@@ -442,16 +442,16 @@ local function HangPedOn(ped, own)
         SetPedRagdollOnCollision(ped, false)
         -- Hidden (from everyone), no collision, unhurt: whip's one owner of these, so letting go never
         -- shows an admin who is invisible
-        Whip.call('HoldPlayerPed', 'hang', { hidden = true, noCollision = true, invincible = true })
+        Whip.core:HoldPlayerPed('hang', { hidden = true, noCollision = true, invincible = true })
     end
     -- No walking, jumping or shooting; jump is read (disabled) to let go
-    Whip.call('BlockControls', 'hang', { groups = { 'move', 'combat' } })
+    Whip.core:BlockControls('hang', { groups = { 'move', 'combat' } })
 end
 Rope.HangPedOn = HangPedOn
 
 local function HangPedOff(ped)
-    Whip.call('ReleasePlayerPed', 'hang')
-    Whip.call('UnblockControls', 'hang')
+    Whip.core:ReleasePlayerPed('hang')
+    Whip.core:UnblockControls('hang')
     local saved = savedPed or { ragdoll = true, flags = {} }
     savedPed = nil
     local own = Rope.HangOwnBody

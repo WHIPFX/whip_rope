@@ -72,7 +72,7 @@ CreateThread(function()
     while true do
         Wait(TEST_LOOK_MS)
         for runId, r in pairs(runs) do
-            if r.test and not Whip.call('GetScenarioRun', runId, { tests = true }) then endRun(runId) end
+            if r.test and not Whip.core:GetScenarioRun(runId, { tests = true }) then endRun(runId) end
         end
     end
 end)
@@ -88,7 +88,7 @@ local function carOf(made)
     if type(made) ~= 'table' then return nil end
     local ent
     if made.vehicleId then
-        local v = Whip.call('GetVehicle', made.vehicleId)
+        local v = Whip.core:GetVehicle(made.vehicleId)
         ent = type(v) == 'table' and v.entity or nil
     end
     local netId = tonumber(made.netId)
@@ -318,7 +318,7 @@ end
 local function inRun(goal, src)
     if not src then return false end
     if goal.who[src] then return true end
-    local run = Whip.call('GetScenarioRun', goal.runId, { tests = true })
+    local run = Whip.core:GetScenarioRun(goal.runId, { tests = true })
     for _, p in ipairs(type(run) == 'table' and run.players or {}) do
         goal.who[tonumber(p.source)] = true
     end

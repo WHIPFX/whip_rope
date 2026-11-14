@@ -115,7 +115,7 @@ end
 
 --- A toast through whip (nothing when whip_core is down).
 function Rope.Util.Notify(msg, kind)
-    Whip.call('Notify', msg, kind or 'info')
+    Whip.core:Notify(msg, kind or 'info')
 end
 
 function Rope.GetRopeByServerId(serverRopeId)

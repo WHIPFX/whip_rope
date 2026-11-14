@@ -8,7 +8,7 @@ author 'Whippy'
 version '1.0.0'
 whip_updates 'WHIPFX/whip_rope'   -- whip_core checks this repository's releases for a newer version
 
--- Whip.register re-runs our registrations whenever whip_core starts; Whip.call is safe while it's down;
+-- Whip.register re-runs our registrations whenever whip_core starts; Whip.core is safe while it's down;
 -- Whip.configPage puts config.lua in /whip.
 shared_script '@whip_core/lib/satellite.lua'
 shared_script 'config.lua'

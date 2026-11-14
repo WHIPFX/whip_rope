@@ -50,7 +50,7 @@ local function ensureLookLoaded(style)
     if style == 'gta' then return Rope.Mesh.EnsureGtaTextures() end
     local model = style == 'segments' and Rope.SegmentModel() or Config.Visuals.PropModel
     if loadedModels[model] then return true end
-    if not Whip.call('LoadModel', model) then
+    if not Whip.core:LoadModel(model) then
         DebugPrint('the rope look did not load:', style)
         return false
     end
@@ -293,7 +293,7 @@ function Rope.CreatePlayerClone(serverId, realPed)
     end
 
     local pedModel = GetEntityModel(realPed)
-    if not Whip.call('LoadModel', pedModel) then
+    if not Whip.core:LoadModel(pedModel) then
         DebugPrint('the stand-in model did not load for', serverId)
         return nil
     end
@@ -336,7 +336,7 @@ function Rope.CreatePlayerClone(serverId, realPed)
 
     SetEntityCollision(clonePed, false, false)
     SetPedCanRagdoll(clonePed, false)
-    if Whip.call('LoadAnimDict', Rope.HANG_ANIM_DICT) and DoesEntityExist(clonePed) then
+    if Whip.core:LoadAnimDict(Rope.HANG_ANIM_DICT) and DoesEntityExist(clonePed) then
         TaskPlayAnim(clonePed, Rope.HANG_ANIM_DICT, Rope.HANG_ANIM_NAME, 8.0, -8.0, -1, 1, 0, false, false, false)
     end
     return clonePed
