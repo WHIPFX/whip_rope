@@ -277,6 +277,7 @@ function Rope.CreatePlayerClone(serverId, realPed)
         local node = rope and rope.nodes[hangData.nodeIndex]
         local cloneData = { ped = realPed, realPed = realPed, own = true, rigging = true }
         Rope.Clones[serverId] = cloneData
+        ---@type table|nil, string|nil
         local rig, why = nil, 'no node'
         if node then rig, why = Rope.HangRig.start(cloneData, rope, node.position) end
         cloneData.rigging = nil
@@ -450,6 +451,7 @@ function Rope.DrawRopeDebug(rope)
             local r, g, b = 255, 255, 0
             if i == 1 then r, g, b = 0, 255, 0 elseif i == nodeCount then r, g, b = 255, 0, 0 end
             DrawMarker(28, p.x, p.y, p.z, 0, 0, 0, 0, 0, 0, 0.06, 0.06, 0.06, r, g, b, 200,
+                ---@diagnostic disable-next-line: param-type-mismatch -- no texture: nil (the natives library types them string)
                 false, false, 2, false, nil, nil, false)
         end
         if Config.DrawDebugLines and i < nodeCount then

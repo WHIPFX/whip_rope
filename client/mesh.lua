@@ -85,7 +85,7 @@ function Rope.Mesh.Create(rope, pointCount, model)
     rope.segmentLast = nil
     rope.segmentModel = model
     local at = rope.nodes[1].position
-    for k = 1, pointCount - 1 do
+    for _ = 1, pointCount - 1 do
         local prop = CreateObject(model, at.x, at.y, at.z, false, false, false)
         if DoesEntityExist(prop) then
             SetEntityCollision(prop, false, false)
@@ -142,6 +142,7 @@ function Rope.Mesh.CreateGta(rope, ropeType)
     local a = rope.nodes[1].position
     local len = (#rope.nodes - 1) * Rope.LinkLength(rope)
     local handle = AddRope(a.x, a.y, a.z, 0.0, 0.0, 0.0, len, ropeType or 4,
+        ---@diagnostic disable-next-line: redundant-parameter -- the last (0) is the native's unkPtr, passed in by FiveM; the natives library leaves it out
         len, 0.5, 0.0, false, false, false, 1.0, false, 0)
     if not handle or not DoesRopeExist(handle) then return false end
     RopeSetUpdatePinverts(handle)

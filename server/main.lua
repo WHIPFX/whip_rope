@@ -8,8 +8,6 @@
 
 local WHICH = { 'origin', 'tail' }
 
-local function other(which) return which == 'origin' and 'tail' or 'origin' end
-
 -- Refused: their game puts the rope back as it is, and whip shows `why`
 local function refuse(source, ropeId, why)
     Ropes.correct(source, ropeId)

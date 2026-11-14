@@ -242,6 +242,7 @@ end
 function Ropes.letGo(source)
     local rope, which = Ropes.heldBy(source, true)
     if not rope then return false end
+    ---@cast which -nil -- it comes with the rope
     rope[which] = Ropes.loose(rope[which])   -- where their hand was
     Ropes.sendEnds(rope, which == 'origin', which == 'tail')
     return true
