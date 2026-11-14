@@ -51,3 +51,4 @@ files {
 data_file 'DLC_ITYP_REQUEST' 'stream/whip_rope_seg.ytyp'
 
 dependencies { 'whip_core' }
+whip_requires '1.0'   -- the whip_core it is built for: the setup report flags an older one
