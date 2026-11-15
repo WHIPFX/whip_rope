@@ -159,11 +159,11 @@ function Rope.MyHeld()
 end
 
 --- A player's ped on this game, or nil — never our own when they are out of range (GetPlayerFromServerId
---- answers -1 then, or 0 on Enhanced, and GetPlayerPed of either can be the local player: Whip.playerIndex).
+--- answers -1 then, and GetPlayerPed(-1) is the local player).
 function Rope.PedOf(serverId)
     if serverId == Rope.MyServerId() then return PlayerPedId() end
-    local player = Whip.playerIndex(serverId)
-    if not player then return nil end
+    local player = GetPlayerFromServerId(serverId)
+    if player == -1 then return nil end
     local ped = GetPlayerPed(player)
     if not ped or ped == 0 or not DoesEntityExist(ped) then return nil end
     return ped
